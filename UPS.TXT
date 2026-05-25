@@ -1,0 +1,7 @@
+! APC UPS Devices
+!
+APC-UPS-01, APC Smart-UPS 3000, Server Room Rack A
+APC-UPS-02, APC Smart-UPS 3000, Server Room Rack B
+APC-UPS-03, APC Back-UPS 1500, MDF Closet
+!
+APC-UPS-04, APC Smart-UPS 1500, IDF Closet #1

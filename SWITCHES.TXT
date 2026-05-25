@@ -1,0 +1,10 @@
+! Switches — edit hostnames/IPs and locations to match your environment
+!
+! Format:  Hostname-or-IP, Physical Location Description
+!
+CAL-Switch-01, Main CAL Cisco 9500 switch, in Closet #1
+CAL-Switch-02, Main CAL Cisco 9500 switch, in Closet #1
+CAL-Switch-03, Main CAL Cisco 9500 switch, in Closet #2
+!
+IOT-Switch-01, IOT Cisco 4300 switch, in Closet #3
+IOT-Switch-02, IOT Cisco 4300 switch, in Closet #3

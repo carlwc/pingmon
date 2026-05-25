@@ -1,0 +1,7 @@
+! Laser Printers
+!
+HP-LJ-M507-01, HP LaserJet Enterprise M507, Accounting Dept - 2nd Floor
+HP-LJ-M507-02, HP LaserJet Enterprise M507, HR Dept - 3rd Floor
+HP-LJ-M404-01, HP LaserJet Pro M404, Reception - 1st Floor
+!
+Xerox-C235-01,  Xerox VersaLink C235, Engineering Lab - Building B
