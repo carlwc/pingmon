@@ -617,7 +617,7 @@ def admin_required(view):
 # ── Shared CSS + layout ───────────────────────────────────────────────────────
 BASE_STYLE = """
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
 <!-- ── Theme: apply before first paint to prevent flash ── -->
@@ -678,7 +678,7 @@ BASE_STYLE = """
 html{font-size:15px}
 body{
   background:var(--bg);color:var(--text);
-  font-family:'Syne',sans-serif;min-height:100vh;
+  font-family:'Inter',sans-serif;min-height:100vh;
   transition:background .25s,color .25s;
 }
 
@@ -690,6 +690,7 @@ header{
   box-shadow:0 1px 4px var(--shadow);
 }
 .header-left{display:flex;align-items:center;gap:.75rem}
+.logo-link{text-decoration:none;display:block}
 .logo{font-size:1.35rem;font-weight:800;letter-spacing:-.03em;color:var(--accent);text-transform:uppercase}
 .logo span{color:var(--text)}
 .tagline{font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
@@ -706,7 +707,7 @@ header{
 /* ── Buttons ── */
 .btn{display:inline-flex;align-items:center;gap:.35rem;padding:.4rem 1rem;border-radius:6px;
   border:1px solid var(--border);background:transparent;color:var(--text);cursor:pointer;
-  font-size:.75rem;font-weight:700;letter-spacing:.03em;font-family:'Syne',sans-serif;
+  font-size:.75rem;font-weight:700;letter-spacing:.03em;font-family:'Inter',sans-serif;
   text-decoration:none;transition:all .15s;white-space:nowrap}
 .btn:hover{border-color:var(--accent);color:var(--accent);background:var(--row-hover)}
 .btn-sm{padding:.3rem .75rem;font-size:.68rem}
@@ -746,29 +747,12 @@ td.actions{white-space:nowrap}
   padding:.35rem .9rem;border-radius:20px;
   border:1px solid var(--border);background:transparent;
   color:var(--muted);cursor:pointer;font-size:.75rem;font-weight:600;
-  font-family:'Syne',sans-serif;letter-spacing:.04em;text-transform:uppercase;
+  font-family:'Inter',sans-serif;letter-spacing:.04em;text-transform:uppercase;
   transition:border-color .15s,color .15s,background .15s;
   white-space:nowrap;
 }
 #themeBtn:hover{border-color:var(--accent);color:var(--accent);background:var(--row-hover)}
 #themeBtn .icon{font-size:.9rem;line-height:1}
-
-/* ── Tab bar ── */
-.tab-bar{
-  display:flex;gap:.2rem;padding:.7rem 2rem 0;
-  border-bottom:1px solid var(--border);background:var(--surface);overflow-x:auto;
-}
-.tab-bar a{
-  display:block;padding:.45rem 1.1rem;font-size:.75rem;font-weight:700;
-  letter-spacing:.06em;text-transform:uppercase;text-decoration:none;color:var(--muted);
-  border-radius:6px 6px 0 0;border:1px solid transparent;border-bottom:none;
-  transition:color .15s,background .15s;white-space:nowrap;
-}
-.tab-bar a:hover{color:var(--text);background:var(--row-hover)}
-.tab-bar a.active{
-  color:var(--accent);background:var(--bg);
-  border-color:var(--border);border-bottom-color:var(--bg);margin-bottom:-1px;
-}
 
 /* ── Main ── */
 main{padding:1.75rem 2rem;max-width:1440px;margin:0 auto}
@@ -792,6 +776,8 @@ main{padding:1.75rem 2rem;max-width:1440px;margin:0 auto}
 .health-bars{display:flex;flex-direction:column;gap:.55rem;margin-bottom:1.75rem}
 .health-row{display:grid;grid-template-columns:170px 1fr 55px;align-items:center;gap:1rem}
 .health-row .name{font-size:.78rem;font-family:'JetBrains Mono',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.health-row .name a{color:var(--text);text-decoration:none;border-bottom:1px dashed var(--border);transition:color .15s,border-color .15s}
+.health-row .name a:hover{color:var(--accent);border-color:var(--accent)}
 .bar-track{height:11px;background:var(--bar-empty);border-radius:99px;overflow:hidden}
 .bar-fill{height:100%;border-radius:99px;transition:width .6s ease}
 .bar-fill.full{background:var(--up)}
@@ -869,7 +855,7 @@ footer{
 .range-btn{
   padding:.3rem .9rem;border-radius:6px;border:1px solid var(--border);
   background:transparent;color:var(--muted);cursor:pointer;font-size:.75rem;font-weight:600;
-  font-family:'Syne',sans-serif;letter-spacing:.05em;text-transform:uppercase;transition:all .15s;
+  font-family:'Inter',sans-serif;letter-spacing:.05em;text-transform:uppercase;transition:all .15s;
 }
 .range-btn:hover{border-color:var(--accent);color:var(--text)}
 .range-btn.active{background:var(--row-hover);border-color:var(--accent);color:var(--accent)}
@@ -908,6 +894,12 @@ def render_footer(note=""):
 
 def render_header():
     user = current_user()
+    admin_html = ""
+    if user and user["role"] == "admin":
+        admin_html = (
+            '<a class="btn btn-ghost btn-sm" href="/admin/groups/new">+ New Group</a>'
+            '<a class="btn btn-ghost btn-sm" href="/admin/users">👥 Users</a>'
+        )
     if user:
         role_label = "Administrator" if user["role"] == "admin" else "User"
         role_cls   = "admin" if user["role"] == "admin" else "user"
@@ -915,6 +907,7 @@ def render_header():
     <div class="user-chip">
       <span class="role-badge {role_cls}">{role_label}</span>
       <span class="user-name">{user['username']}</span>
+      {admin_html}
       <a class="btn btn-ghost btn-sm" href="/account/change-password">Change Password</a>
       <a class="btn btn-ghost btn-sm" href="/logout">Log Out</a>
     </div>"""
@@ -924,10 +917,10 @@ def render_header():
     return f"""
 <header>
   <div class="header-left">
-    <div>
+    <a href="/" class="logo-link">
       <div class="logo">Ping<span>Mon</span></div>
       <div class="tagline">Network Device Monitor v3</div>
-    </div>
+    </a>
   </div>
   <div class="header-right">
     {account_html}
@@ -937,20 +930,6 @@ def render_header():
     </button>
   </div>
 </header>"""
-
-def render_tabs(active):
-    device_types = get_device_types()
-    user = current_user()
-    html = '<nav class="tab-bar">'
-    html += f'<a href="/" class="{"active" if active=="dashboard" else ""}">📊 Dashboard</a>'
-    for dt in device_types:
-        cls = "active" if active == dt else ""
-        html += f'<a href="/devices/{dt}" class="{cls}">{dt.title()}</a>'
-    if user and user["role"] == "admin":
-        html += f'<a href="/admin/groups/new" class="{"active" if active=="new-group" else ""}">+ New Group</a>'
-        html += f'<a href="/admin/users" class="{"active" if active=="users" else ""}">👥 Users</a>'
-    html += '</nav>'
-    return html
 
 TABLE_SCRIPT = """
 <script>
@@ -1022,7 +1001,7 @@ def dashboard():
         cls = "full" if pct == 100 else ("warn" if pct >= 50 else "danger")
         bars_html += f"""
         <div class="health-row">
-          <div class="name">{dt}</div>
+          <div class="name"><a href="/devices/{dt}">{dt}</a></div>
           <div class="bar-track"><div class="bar-fill {cls}" style="width:{pct}%"></div></div>
           <div class="pct">{pct}%</div>
         </div>"""
@@ -1030,7 +1009,7 @@ def dashboard():
     return render_template_string(f"""<!DOCTYPE html><html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>PingMon — Dashboard</title>{BASE_STYLE}</head><body>
-{render_header()}{render_tabs("dashboard")}
+{render_header()}
 <main>
   <div class="stat-grid">
     <div class="stat-card">
@@ -1170,7 +1149,10 @@ def change_password():
       <div class="form-group"><label class="form-label">Confirm New Password</label>
         <input class="form-input" type="password" name="confirm_password" required></div>
       <div class="form-hint">Minimum 8 characters.</div>
-      <div class="form-actions"><button class="btn btn-primary" type="submit">Update Password</button></div>
+      <div class="form-actions">
+        <button class="btn btn-primary" type="submit">Update Password</button>
+        {'' if forced else '<a class="btn btn-ghost" href="javascript:history.back()">Cancel</a>'}
+      </div>
     </form>
   </div>
 </main>
@@ -1241,8 +1223,9 @@ def _devices_page(device_type, error=None):
     return render_template_string(f"""<!DOCTYPE html><html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>PingMon — {dt}</title>{BASE_STYLE}</head><body>
-{render_header()}{render_tabs(dt)}
+{render_header()}
 <main>
+  <a class="back-link" href="/">← Back</a>
   {alert}
   <div class="stat-grid" style="margin-bottom:1.5rem">
     <div class="stat-card"><div class="label">Total</div><div class="value accent">{len(rows)}</div></div>
@@ -1361,7 +1344,7 @@ def device_edit(device_type, hostname):
     return render_template_string(f"""<!DOCTYPE html><html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>PingMon — Edit Device</title>{BASE_STYLE}</head><body>
-{render_header()}{render_tabs(dt)}
+{render_header()}
 <main style="max-width:520px">
   <a class="back-link" href="/devices/{dt}">← Back to {dt}</a>
   <div class="form-card">
@@ -1409,7 +1392,7 @@ def group_new():
     return render_template_string(f"""<!DOCTYPE html><html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>PingMon — New Device Group</title>{BASE_STYLE}</head><body>
-{render_header()}{render_tabs("new-group")}
+{render_header()}
 <main class="auth-wrap">
   <div class="form-card">
     <div class="section-title">New Device Group</div>
@@ -1487,7 +1470,7 @@ def _users_page(error=None, success=None):
     return render_template_string(f"""<!DOCTYPE html><html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>PingMon — Users</title>{BASE_STYLE}</head><body>
-{render_header()}{render_tabs("users")}
+{render_header()}
 <main>
   {alert}
   <div class="table-wrapper" style="margin-bottom:1.5rem">
