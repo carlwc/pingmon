@@ -1,0 +1,14 @@
+# Runtime data — machine-specific, regenerated automatically on first run
+pingmon.db
+pingmon.db-wal
+pingmon.db-shm
+pingmon.secret
+backups/
+
+# Python
+__pycache__/
+*.pyc
+venv/
+
+# OS
+.DS_Store
